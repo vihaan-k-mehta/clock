@@ -1,9 +1,9 @@
-let speedMultiplier = 10; // 1 real minute = 10 fake minutes
+let speedMultiplier = 10; // 1 real second = 10 fake seconds
 let currentTime = new Date();
 
 function updateClock() {
-    // Increment the current time by real delta * speedMultiplier
-    currentTime = new Date(currentTime.getTime() + 1000 * speedMultiplier / 60);
+    // Increment by multiplier in real milliseconds
+    currentTime = new Date(currentTime.getTime() + 1000 * speedMultiplier);
     
     let hours = String(currentTime.getHours()).padStart(2, '0');
     let minutes = String(currentTime.getMinutes()).padStart(2, '0');
@@ -12,5 +12,6 @@ function updateClock() {
     document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
 }
 
+// Update every 1 second in real time
 setInterval(updateClock, 1000);
 updateClock();
