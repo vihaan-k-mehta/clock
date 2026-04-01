@@ -8,8 +8,8 @@ const dayOutPut = document.querySelector(".day");
 const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const monthName = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
-// 1 real second = 6.6667 fake seconds (5 hours in 45 minutes)
-const fakeSpeed = 6.6667;
+// Correct multiplier: 18,000 fake seconds / 2,700 real seconds
+const fakeMsPerRealMs = 6.6667; // 1 real ms = 6.6667 fake ms
 
 let startFakeTime = new Date();
 let realStart = Date.now();
@@ -20,7 +20,10 @@ function formatTime(val) {
 
 function clock() {
     const elapsedRealMs = Date.now() - realStart;
-    const elapsedFakeMs = elapsedRealMs * fakeSpeed * 1000; // convert seconds → ms
+
+    // Correct: scale by fakeMsPerRealMs, no extra *1000
+    const elapsedFakeMs = elapsedRealMs * fakeMsPerRealMs;
+
     const d = new Date(startFakeTime.getTime() + elapsedFakeMs);
 
     const h = d.getHours();
