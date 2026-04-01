@@ -1,0 +1,15 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: black;
+    color: white;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: 5rem;
+}
+
+#clock {
+    text-align: center;
+}
