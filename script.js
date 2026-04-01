@@ -5,40 +5,46 @@ const monthOutPut = document.querySelector(".month");
 const dayOfWeekOutPut = document.querySelector(".dayofweek");
 const dayOutPut = document.querySelector(".day");
 
+const speedInput = document.getElementById("speed");
+const speedValue = document.getElementById("speedValue");
+
 const weekday = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const monthName = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-
-// Correct multiplier: 18,000 fake seconds / 2,700 real seconds
-const fakeMsPerRealMs = 6.6667; // 1 real ms = 6.6667 fake ms
 
 let startFakeTime = new Date();
 let realStart = Date.now();
 
+// Initial multiplier
+let speedMultiplier = parseFloat(speedInput.value);
+
+// Update multiplier when slider changes
+speedInput.addEventListener("input", () => {
+  speedMultiplier = parseFloat(speedInput.value);
+  speedValue.textContent = speedMultiplier;
+});
+
 function formatTime(val) {
-    return val < 10 ? "0" + val : val;
+  return val < 10 ? "0" + val : val;
 }
 
 function clock() {
-    const elapsedRealMs = Date.now() - realStart;
+  const elapsedRealMs = Date.now() - realStart;
+  const elapsedFakeMs = elapsedRealMs * speedMultiplier;
+  const d = new Date(startFakeTime.getTime() + elapsedFakeMs);
 
-    // Correct: scale by fakeMsPerRealMs, no extra *1000
-    const elapsedFakeMs = elapsedRealMs * fakeMsPerRealMs;
+  const h = d.getHours();
+  const m = d.getMinutes();
+  const s = d.getSeconds();
 
-    const d = new Date(startFakeTime.getTime() + elapsedFakeMs);
+  dayOfWeekOutPut.innerHTML = weekday[d.getDay()];
+  monthOutPut.innerHTML = monthName[d.getMonth()];
+  dayOutPut.innerHTML = d.getDate();
 
-    const h = d.getHours();
-    const m = d.getMinutes();
-    const s = d.getSeconds();
+  timeOutPut.innerHTML = `${formatTime(h)}:${formatTime(m)}`;
+  secOutPut.innerHTML = `${formatTime(s)}`;
+  ampmOutPut.innerHTML = h >= 12 ? "PM" : "AM";
 
-    dayOfWeekOutPut.innerHTML = weekday[d.getDay()];
-    monthOutPut.innerHTML = monthName[d.getMonth()];
-    dayOutPut.innerHTML = d.getDate();
-
-    timeOutPut.innerHTML = `${formatTime(h)}:${formatTime(m)}`;
-    secOutPut.innerHTML = `${formatTime(s)}`;
-    ampmOutPut.innerHTML = h >= 12 ? "PM" : "AM";
-
-    requestAnimationFrame(clock);
+  requestAnimationFrame(clock);
 }
 
 clock();
