@@ -1,19 +1,24 @@
-let speedMultiplier = 60; // 1 real second = 1 fake minute
-let startTime = new Date(); // fake clock starting point
-let realStart = Date.now(); // reference for real time
+// 1 real second = 1 fake hour
+let speedMultiplier = 3600; // multiply elapsed real time in milliseconds
+let startTime = new Date(); 
+let realStart = performance.now();
 
 function updateClock() {
-    let elapsedRealMs = Date.now() - realStart; // how much real time passed
-    let elapsedFakeMs = elapsedRealMs * speedMultiplier; // scale by speed
+    // Calculate how much fake time has passed
+    let elapsedRealMs = performance.now() - realStart;
+    let elapsedFakeMs = elapsedRealMs * speedMultiplier;
+
     let currentTime = new Date(startTime.getTime() + elapsedFakeMs);
 
-    let hours = String(currentTime.getHours()).padStart(2, '0');
-    let minutes = String(currentTime.getMinutes()).padStart(2, '0');
-    let seconds = String(currentTime.getSeconds()).padStart(2, '0');
+    // Format hours, minutes, seconds
+    let h = String(currentTime.getHours()).padStart(2, '0');
+    let m = String(currentTime.getMinutes()).padStart(2, '0');
+    let s = String(currentTime.getSeconds()).padStart(2, '0');
 
-    document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
-    
-    requestAnimationFrame(updateClock); // smooth continuous update
+    document.getElementById('clock').textContent = `${h}:${m}:${s}`;
+
+    // Smooth continuous update
+    requestAnimationFrame(updateClock);
 }
 
 updateClock();
