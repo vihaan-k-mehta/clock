@@ -1,21 +1,14 @@
-// Set how many fake seconds pass per 1 real second
-let fakeSecondsPerRealSecond = 600; // 1 real second = 10 fake minutes
-
-let startTime = new Date();        // starting point of fake clock
-let realStart = performance.now(); // reference real time
+let fakeSpeed = 1000 * 60 * 60; // 1 real second = 1 fake hour in milliseconds
+let startFakeTime = Date.now();
 
 function updateClock() {
-    // Real time elapsed in seconds
-    let elapsedRealSec = (performance.now() - realStart) / 1000;
+    // Ignore how often updateClock is called — calculate exact fake time
+    let elapsed = (Date.now() - startFakeTime) * fakeSpeed / 1000;
+    let now = new Date(startFakeTime + elapsed);
 
-    // Calculate fake time elapsed
-    let elapsedFakeMs = elapsedRealSec * fakeSecondsPerRealSecond * 1000;
-
-    let currentTime = new Date(startTime.getTime() + elapsedFakeMs);
-
-    let h = String(currentTime.getHours()).padStart(2, '0');
-    let m = String(currentTime.getMinutes()).padStart(2, '0');
-    let s = String(currentTime.getSeconds()).padStart(2, '0');
+    let h = String(now.getHours()).padStart(2, '0');
+    let m = String(now.getMinutes()).padStart(2, '0');
+    let s = String(now.getSeconds()).padStart(2, '0');
 
     document.getElementById('clock').textContent = `${h}:${m}:${s}`;
 
